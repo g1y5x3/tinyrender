@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <cstdint>
+#include <string>
+#include <vector>
 
 // A 24-bit TGA contains only an 18-byte header followed by the image data as packed
 // RGB data.
@@ -50,6 +51,9 @@ public:
 
     TGAImage() = default;
     TGAImage(int w, int h, Format format);
+
+    bool write_tga_file(const std::string& filename, bool rle = false) const;
+    bool set(int x, int y, const TGAColor& c);
 
 private:
     std::vector<uint8_t> data;
