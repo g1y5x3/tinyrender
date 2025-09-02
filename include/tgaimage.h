@@ -53,9 +53,10 @@ public:
     TGAImage(int w, int h, Format format);
 
     bool write_tga_file(const std::string& filename, bool rle = false) const;
-    bool flip_horizontally();
     bool flip_vertically();
+    bool flip_horizontally();
     bool set(int x, int y, const TGAColor& c);
+    TGAColor get(int x, int y) const;
 
 private:
     std::vector<uint8_t> data;
