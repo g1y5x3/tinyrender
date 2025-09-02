@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -18,17 +19,16 @@ bool TGAImage::write_tga_file(const std::string& filename, bool rle) const {
     header.bitsperpixel = bytespp << 3;
     header.width = width;
     header.height = height;
-    /*
-    0  no image data is present
-    1  uncompressed color-mapped image
-    2  uncompressed true-color image
-    3  uncompressed grayscale image
-    9  run-length encoded color-mapped image
-    10 run-length encoded true-color image
-    11 run-length encoded grayscale image
-    */
+    // TGA datatype codes from the specification:
+    // 0  no image data is present
+    // 1  uncompressed color-mapped image
+    // 2  uncompressed true-color image
+    // 3  uncompressed grayscale image
+    // 9  run-length encoded color-mapped image
+    // 10 run-length encoded true-color image
+    // 11 run-length encoded grayscale image
     header.datatypecode = (bytespp == GRAYSCALE ? (rle ? 11 : 3) : (rle ? 10 : 2));
-
+    header.imagedescriptor = 0x20; // top-left origin
     out.write(reinterpret_cast<const char*>(&header), sizeof(header));
     if (!out.good()) {
         std::cerr << "Failed to write header\n";
@@ -54,6 +54,20 @@ bool TGAImage::write_tga_file(const std::string& filename, bool rle) const {
         return false;
     }
 
+    return true;
+}
+
+bool TGAImage::flip_vertically() {
+    if (data.empty()) return false;
+    size_t row_size = width * bytespp;
+    auto top = data.begin();
+    auto bottom = data.end() - row_size;
+    
+    for (int i = 0; i < height >> 1; ++i) {
+        std::swap_ranges(top, top + row_size, bottom);
+        top += row_size;
+        bottom -= row_size;
+    }
     return true;
 }
 
