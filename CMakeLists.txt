@@ -12,3 +12,9 @@ target_include_directories(main PUBLIC include)
 
 # Optional: Add compiler warnings
 target_compile_options(main PRIVATE -Wall -Wextra -pedantic)
+
+# Add these files to the list of files to be deleted by "make clean"
+file(GLOB TGA_FILES "build/*.tga")
+set_directory_properties(PROPERTIES
+    ADDITIONAL_MAKE_CLEAN_FILES "${TGA_FILES}"
+)
