@@ -3,6 +3,7 @@
 #include <fstream>
 #include <format>
 #include <iostream>
+#include <span>
 #include "tgaimage.h"
 
 TGAImage::TGAImage(int w, int h, Format format) :
@@ -32,7 +33,7 @@ bool TGAImage::write_tga_file(const std::string& filename, bool rle) const {
     // 10 run-length encoded true-color image
     // 11 run-length encoded grayscale image
     header.datatypecode = (bytespp == static_cast<int>(Format::GRAYSCALE) ? (rle ? 11 : 3) : (rle ? 10 : 2));
-    header.imagedescriptor = 0x20; // top-left origin
+    header.imagedescriptor = 0x00; // bottom-left origin
 
     out.write(reinterpret_cast<const char*>(&header), sizeof(header));
     if (!out.good()) {
@@ -78,7 +79,8 @@ bool TGAImage::write_tga_file(const std::string& filename, bool rle) const {
 
 bool TGAImage::flip_vertically() {
     if (data.empty()) return false;
-    size_t row_size = width * bytespp;
+
+    const size_t row_size = width * bytespp;
     auto top = data.begin();
     auto bottom = data.end() - row_size;
 
@@ -92,7 +94,17 @@ bool TGAImage::flip_vertically() {
 
 bool TGAImage::flip_horizontally() {
     if (data.empty()) return false;
-    int half_width = width >> 1;
+
+    for (int i = 0; i < height; ++i) {
+        auto row = data.begin() + i * width * bytespp;
+
+        for (int j = 0; j < width >> 1; ++j) {
+            auto left_pixel = row + j * bytespp;
+            auto right_pixel = row + (width - 1 - j) * bytespp;
+            std::swap_ranges(left_pixel, left_pixel + bytespp, right_pixel);
+        }
+    }
+    return true;
 }
 
 TGAColor TGAImage::get(int x, int y) const {
