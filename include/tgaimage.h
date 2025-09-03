@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -52,13 +53,15 @@ public:
     TGAImage() = default;
     TGAImage(int w, int h, Format format);
 
-    bool write_tga_file(const std::string& filename, bool rle = false) const;
+    [[nodiscard]] bool write_tga_file(const std::string& filename, bool rle = true) const;
     bool flip_vertically();
     bool flip_horizontally();
     bool set(int x, int y, const TGAColor& c);
     TGAColor get(int x, int y) const;
 
 private:
+    [[nodiscard]] bool write_rle_data(std::ofstream& out) const;
+
     std::vector<uint8_t> data;
     int width = 0;
     int height = 0;

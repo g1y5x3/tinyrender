@@ -3,6 +3,7 @@
 #include <fstream>
 #include <format>
 #include <iostream>
+#include <ranges>
 #include <span>
 #include "tgaimage.h"
 
@@ -74,6 +75,64 @@ bool TGAImage::write_tga_file(const std::string& filename, bool rle) const {
         return false;
     }
 
+    return true;
+}
+
+bool TGAImage::write_rle_data(std::ofstream& out) const {
+    std::span<const std::uint8_t> image_data{data};
+    constexpr size_t max_chunk_length = 128;
+
+    while(!image_data.empty()) {
+        auto first_pixel = image_data.subspan(0, bytespp);
+        size_t chunk_start = 0;
+
+        // Check if we should start a run-length packet or a raw packet
+        bool is_run_length = false;
+        if (image_data.size() >= 2 * bytespp) {
+            auto second_pixel = image_data.subspan(bytespp, bytespp);
+            if (std::ranges::equal(first_pixel, second_pixel)) {
+                is_run_length = true;
+            }
+        }
+
+        if (is_run_length) {
+            size_t run_length = 2;
+            while (run_length < max_chunk_length && image_data.size() > run_length * bytespp) {
+                auto next_pixel = image_data.subspan(run_length * bytespp, bytespp);
+                if (!std::ranges::equal(first_pixel, next_pixel)) {
+                    break;
+                }
+                run_length++;
+            }
+            // Write the run-length packet header and one pixel of data
+            out.put(static_cast<unsigned char>((run_length - 1) | 0x80));
+            out.write(reinterpret_cast<const char*>(first_pixel.data()), bytespp);
+            chunk_start += run_length * bytespp;
+        } else {
+            // Raw packet, a run of three or more identical pixels is when RLE becomes more efficient
+            size_t raw_length = 1;
+            while (raw_length < max_chunk_length && image_data.size() > raw_length * bytespp) {
+                if (image_data.size() >= (raw_length + 2) * bytespp) {
+                    auto p1 = image_data.subspan((raw_length - 1) * bytespp, bytespp);
+                    auto p2 = image_data.subspan(raw_length * bytespp, bytespp);
+                    auto p3 = image_data.subspan((raw_length + 1) * bytespp, bytespp);
+                    if (std::ranges::equal(p1, p2) && std::ranges::equal(p2, p3)) {
+                        break;
+                    }
+                }
+                raw_length++;
+            }
+            // Write the raw packet header and the pixel data
+            out.put(static_cast<unsigned char>(raw_length - 1));
+            auto chunk_to_write = image_data.subspan(0, raw_length * bytespp);
+            out.write(reinterpret_cast<const char*>(image_data.data()), raw_length * bytespp);
+            chunk_start += raw_length * bytespp;
+        }
+
+        if (!out) return false;
+        // Advance to the next uncompressed pixel
+        image_data = image_data.subspan(chunk_start);
+    }
     return true;
 }
 
