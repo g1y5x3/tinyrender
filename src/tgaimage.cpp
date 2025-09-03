@@ -49,8 +49,10 @@ bool TGAImage::write_tga_file(const std::string& filename, bool rle) const {
             return false;
         }
     } else {
-        std::cerr << "RLE compression not implemented\n";
-        return false;
+        if (!write_rle_data(out)) {
+            std::cerr << "Failed to write RLE data\n";
+            return false;
+        }
     }
 
     constexpr char developer_area[4] = {0, 0, 0, 0};
@@ -88,7 +90,7 @@ bool TGAImage::write_rle_data(std::ofstream& out) const {
 
         // Check if we should start a run-length packet or a raw packet
         bool is_run_length = false;
-        if (image_data.size() >= 2 * bytespp) {
+        if (image_data.size() >= 2 * static_cast<size_t>(bytespp)) {
             auto second_pixel = image_data.subspan(bytespp, bytespp);
             if (std::ranges::equal(first_pixel, second_pixel)) {
                 is_run_length = true;

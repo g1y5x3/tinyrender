@@ -7,10 +7,11 @@ const TGAColor red{255, 0,   0,   255};
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
     TGAImage image(100, 100, TGAImage::RGB);
+    bool use_rle = true;
 
     image.set(75, 75, red);
     std::string filename = "output.tga";
-    if (image.write_tga_file(filename)) {
+    if (image.write_tga_file(filename, use_rle)) {
         std::cout << "Successfully wrote image to " << filename << std::endl;
     } else {
         std::cerr << "Failed to write image to " << filename << std::endl;
@@ -19,7 +20,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
 
     image.flip_vertically();
     filename = "output_vertflip.tga";
-    if (image.write_tga_file(filename)) {
+    if (image.write_tga_file(filename, use_rle)) {
         std::cout << "Successfully wrote image to " << filename << std::endl;
     } else {
         std::cerr << "Failed to write image to " << filename << std::endl;
@@ -28,7 +29,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
 
     image.flip_horizontally();
     filename = "output_horiflip.tga";
-    if (image.write_tga_file(filename)) {
+    if (image.write_tga_file(filename, use_rle)) {
         std::cout << "Successfully wrote image to " << filename << std::endl;
     } else {
         std::cerr << "Failed to write image to " << filename << std::endl;
