@@ -6,12 +6,12 @@ project(TinyRenderer CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(main src/main.cpp src/tgaimage.cpp)
+add_executable(test_tgaimage src/main.cpp src/tgaimage.cpp)
 
-target_include_directories(main PUBLIC include)
+target_include_directories(test_tgaimage PUBLIC include)
 
 # Optional: Add compiler warnings
-target_compile_options(main PRIVATE -Wall -Wextra -pedantic)
+target_compile_options(test_tgaimage PRIVATE -Wall -Wextra -pedantic)
 
 # Add these files to the list of files to be deleted by "make clean"
 file(GLOB TGA_FILES "build/*.tga")

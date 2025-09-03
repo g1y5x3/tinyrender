@@ -7,10 +7,19 @@ const TGAColor red{255, 0,   0,   255};
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
     TGAImage image(100, 100, TGAImage::RGB);
-    bool use_rle = true;
-
     image.set(75, 75, red);
-    std::string filename = "output.tga";
+
+    bool use_rle = false;
+    std::string filename = "output_uncompressed.tga";
+    if (image.write_tga_file(filename, use_rle)) {
+        std::cout << "Successfully wrote image to " << filename << std::endl;
+    } else {
+        std::cerr << "Failed to write image to " << filename << std::endl;
+        return 1;
+    }
+
+    use_rle = true;
+    filename = "output_compressed.tga";
     if (image.write_tga_file(filename, use_rle)) {
         std::cout << "Successfully wrote image to " << filename << std::endl;
     } else {
@@ -19,7 +28,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
     }
 
     image.flip_vertically();
-    filename = "output_vertflip.tga";
+    filename = "output_compressed_vertflip.tga";
     if (image.write_tga_file(filename, use_rle)) {
         std::cout << "Successfully wrote image to " << filename << std::endl;
     } else {
@@ -28,7 +37,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
     }
 
     image.flip_horizontally();
-    filename = "output_horiflip.tga";
+    filename = "output_compressed_horiflip.tga";
     if (image.write_tga_file(filename, use_rle)) {
         std::cout << "Successfully wrote image to " << filename << std::endl;
     } else {

@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <cstring>
 #include <fstream>
-#include <format>
 #include <iostream>
 #include <ranges>
 #include <span>
@@ -17,7 +16,7 @@ bool TGAImage::write_tga_file(const std::string& filename, bool rle) const {
     std::ofstream out;
     out.open(filename, std::ios::binary);
     if (!out.is_open()) {
-        std::cerr << std::format("Failed to open file: {}\n", filename);
+        std::cerr << "Failed to open file: " << filename << '\n';
         return false;
     }
 
