@@ -30,18 +30,18 @@ struct TGAColor {
     uint8_t bgra[4] = {0, 0, 0, 255};
     uint8_t bytespp = 4; // bytes per pixel
 
-    TGAColor() = default;
+    constexpr TGAColor() = default;
 
-    TGAColor(uint8_t R, uint8_t G, uint8_t B, uint8_t A=255) : 
+    constexpr TGAColor(uint8_t R, uint8_t G, uint8_t B, uint8_t A=255) : 
         bgra{B, G, R, A}, bytespp(4) {}
 
-    TGAColor(const uint8_t* p, uint8_t bpp) : bytespp(bpp) {
+    constexpr TGAColor(const uint8_t* p, uint8_t bpp) : bytespp(bpp) {
         for (int i = 0; i < bpp; ++i) {
             bgra[i] = p[i];
         }
     }
 
-    uint8_t& operator[](const int i) { return bgra[i]; }
+    constexpr uint8_t& operator[](const int i) { return bgra[i]; }
 };
 
 class TGAImage {
@@ -53,7 +53,7 @@ public:
     TGAImage() = default;
     TGAImage(int w, int h, Format format);
 
-    [[nodiscard]] bool write_tga_file(const std::string& filename, bool rle = true) const;
+    bool write_tga_file(const std::string& filename, bool rle = true) const;
     bool flip_vertically();
     bool flip_horizontally();
     bool set(int x, int y, const TGAColor& c);
