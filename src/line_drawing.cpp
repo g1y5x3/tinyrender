@@ -1,5 +1,3 @@
-#include <cmath>
-#include <cstdlib>
 #include <ctime>
 #include "tgaimage.h"
 
