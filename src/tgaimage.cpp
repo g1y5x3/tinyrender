@@ -125,7 +125,6 @@ bool TGAImage::write_rle_data(std::ofstream& out) const {
             }
             // Write the raw packet header and the pixel data
             out.put(static_cast<unsigned char>(raw_length - 1));
-            auto chunk_to_write = image_data.subspan(0, raw_length * bytespp);
             out.write(reinterpret_cast<const char*>(image_data.data()), raw_length * bytespp);
             chunk_start += raw_length * bytespp;
         }
