@@ -7,11 +7,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(test_tgaimage src/test_tgaimage.cpp src/tgaimage.cpp)
+add_executable(line_drawing  src/line_drawing.cpp  src/tgaimage.cpp)
 
 target_include_directories(test_tgaimage PUBLIC include)
+target_include_directories(line_drawing  PUBLIC include)
 
 # Optional: Add compiler warnings
-target_compile_options(test_tgaimage PRIVATE -Wall -Wextra -pedantic)
+target_compile_options(test_tgaimage PRIVATE -Wall -Wextra -pedantic -g -O3)
+target_compile_options(line_drawing  PRIVATE -Wall -Wextra -pedantic -g -O3)
 
 # Add a custom target to remove all .tga files
 add_custom_target(clean_tga

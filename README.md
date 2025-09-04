@@ -20,3 +20,5 @@ cd build
 cmake ..
 make
 ```
+
+## Profiling
