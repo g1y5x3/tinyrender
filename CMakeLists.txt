@@ -6,9 +6,9 @@ project(TinyRenderer CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(test_tgaimage    src/test_tgaimage.cpp src/tgaimage.cpp)
-add_executable(line_drawing     src/line_drawing.cpp  src/tgaimage.cpp)
-add_executable(wireframe_render src/wireframe_render.cpp src/tgaimage.cpp src/objmodel.cpp)
+add_executable(test_tgaimage    src/test_tgaimage.cpp    src/tgaimage.cpp)
+add_executable(line_drawing     src/line_drawing.cpp     src/renderer.cpp src/tgaimage.cpp)
+add_executable(wireframe_render src/wireframe_render.cpp src/renderer.cpp src/tgaimage.cpp src/objmodel.cpp)
 
 target_include_directories(test_tgaimage    PUBLIC include)
 target_include_directories(line_drawing     PUBLIC include)

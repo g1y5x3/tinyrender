@@ -10,7 +10,6 @@ struct Vec3f {
 class ObjModel{
 public:
     ObjModel() = default;
-
     bool load_obj_file(const std::string& filename);
 
 private:
