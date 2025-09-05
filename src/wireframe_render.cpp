@@ -1,14 +1,12 @@
 #include "tgaimage.h"
 #include "objmodel.h"
 
-constexpr TGAColor white = {255, 255, 255, 255};
-constexpr TGAColor red   = {255, 0,   0,   255};
-
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
+    ObjModel model("data/diablo3_pose.obj");
 
-    ObjModel model;
-    model.load_obj_file("data/diablo3_pose.obj");
-
+    TGAImage framebuffer(1000, 1000, TGAImage::RGB);
+    model.render_wireframe(framebuffer);
+    framebuffer.write_tga_file("framebuffer.tga");
 
     return 0;
 }

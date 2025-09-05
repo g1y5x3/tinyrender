@@ -1,7 +1,11 @@
 #include <fstream>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 #include "objmodel.h"
+#include "renderer.h"
+
+constexpr TGAColor white = {255, 255, 255, 255};
+constexpr TGAColor red   = {255, 0,   0,   255};
 
 // Load a Wavefront .obj file. Only supports vertex positions (v) and faces (f).
 bool ObjModel::load_obj_file(const std::string& filename) {
@@ -73,5 +77,38 @@ bool ObjModel::load_obj_file(const std::string& filename) {
         }
     }
 
+    return true;
+}
+
+std::tuple<int, int> ObjModel::project_xy(const Vec3f& v, int width, int height) const {
+    int x = static_cast<int>((v.x + 1.f) * width / 2.f);
+    int y = static_cast<int>((v.y + 1.f) * height / 2.f);
+    return {x, y};
+}
+
+bool ObjModel::render_wireframe(TGAImage& image) {
+    // convert to screen space
+    const int width = image.get_width();
+    const int height = image.get_height();
+
+    //render through xy plane
+    for (size_t i = 0; i < faces_.size(); ++i) {
+        const auto& face = faces_[i];
+
+        // render the edges of the face
+        auto [a0, b0] = project_xy(vertices_[face[0]], width, height);
+        auto [a1, b1] = project_xy(vertices_[face[1]], width, height);
+        auto [a2, b2] = project_xy(vertices_[face[2]], width, height);
+
+        line(a0, b0, a1, b1, image, red);
+        line(a1, b1, a2, b2, image, red);
+        line(a2, b2, a0, b0, image, red);
+    }
+
+    for (size_t i = 0; i < vertices_.size(); ++i) {
+        auto [x, y] = project_xy(vertices_[i], width, height);
+        image.set(x, y, white);
+    }
+    
     return true;
 }

@@ -56,8 +56,10 @@ public:
     bool write_tga_file(const std::string& filename, bool rle = true) const;
     bool flip_vertically();
     bool flip_horizontally();
-    bool set(int x, int y, const TGAColor& c);
     TGAColor get(int x, int y) const;
+    bool set(int x, int y, const TGAColor& c);
+    int get_width() const { return width; }
+    int get_height() const { return height; }
 
 private:
     [[nodiscard]] bool write_rle_data(std::ofstream& out) const;
