@@ -15,4 +15,5 @@ public:
 
 private:
     std::vector<Vec3f> vertices_;
+    std::vector<std::vector<int>> faces_;
 };
