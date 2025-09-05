@@ -18,7 +18,7 @@ class ObjModel:
             with open(filename, 'r') as file:
                 lines = file.readlines()
         except IOError:
-            print(f"Error: Could not open file {filename}", file=sys.stderr)
+            print(f"Error: Could not open file {filename}")
             return False
 
         vertex_count = sum(1 for line in lines if line.startswith('v '))
