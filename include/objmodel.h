@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
 #include "tgaimage.h"
 
 struct Vec3f {
