@@ -100,9 +100,7 @@ bool ObjModel::render_wireframe(TGAImage& image) {
         auto [a1, b1] = project_xy(vertices_[face[1]], width, height);
         auto [a2, b2] = project_xy(vertices_[face[2]], width, height);
 
-        line(a0, b0, a1, b1, image, red);
-        line(a1, b1, a2, b2, image, red);
-        line(a2, b2, a0, b0, image, red);
+        triangle(a0, b0, a1, b1, a2, b2, image, red);
     }
 
     for (size_t i = 0; i < vertices_.size(); ++i) {

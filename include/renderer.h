@@ -5,6 +5,4 @@
 
 // Draws a line using Bresenham's line algorithm.
 void line(int x0, int y0, int x1, int y1, TGAImage& image, const TGAColor& color);
-
-// // Draws a wireframe triangle by connecting its three vertices.
-// void triangle(const Vec3f& v0, const Vec3f& v1, const Vec3f& v2, TGAImage& image, const TGAColor& color);
+void triangle(int ax, int ay, int bx, int by, int cx, int cy, TGAImage& image, const TGAColor& color);

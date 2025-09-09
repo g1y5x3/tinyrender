@@ -30,10 +30,8 @@ void line(int x0, int y0, int x1, int y1, TGAImage& image, const TGAColor& color
     }
 }
 
-// void triangle(const Vec3f& v0, const Vec3f& v1, const Vec3f& v2, TGAImage& image, const TGAColor& color) {
-//     // For now, we assume the Vec3f coordinates are already in screen space.
-//     // We'll add the viewport transformation in main.cpp
-//     line(static_cast<int>(v0.x), static_cast<int>(v0.y), static_cast<int>(v1.x), static_cast<int>(v1.y), image, color);
-//     line(static_cast<int>(v1.x), static_cast<int>(v1.y), static_cast<int>(v2.x), static_cast<int>(v2.y), image, color);
-//     line(static_cast<int>(v2.x), static_cast<int>(v2.y), static_cast<int>(v0.x), static_cast<int>(v0.y), image, color);
-// }
+void triangle(int ax, int ay, int bx, int by, int cx, int cy, TGAImage& image, const TGAColor& color) {
+    line(ax, ay, bx, by, image, color);
+    line(bx, by, cx, cy, image, color);
+    line(cx, cy, ax, ay, image, color);
+}
