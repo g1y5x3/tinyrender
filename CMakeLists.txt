@@ -7,17 +7,20 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(test_tgaimage src/test_tgaimage.cpp include/tgaimage.cpp)
-add_executable(line_drawing  src/line_drawing.cpp  include/renderer.cpp include/tgaimage.cpp)
+add_executable(line_drawing src/line_drawing.cpp include/renderer.cpp include/tgaimage.cpp)
 add_executable(render_diablo src/render_diablo.cpp include/renderer.cpp include/tgaimage.cpp include/objmodel.cpp)
+add_executable(triangle_rasterization src/triangle_rasterization.cpp include/tgaimage.cpp)
 
 target_include_directories(test_tgaimage PUBLIC include)
-target_include_directories(line_drawing  PUBLIC include)
+target_include_directories(line_drawing PUBLIC include)
 target_include_directories(render_diablo PUBLIC include)
+target_include_directories(triangle_rasterization PUBLIC include)
 
 # Optional: Add compiler warnings
 target_compile_options(test_tgaimage PRIVATE -Wall -Wextra -pedantic -g -O3)
-target_compile_options(line_drawing  PRIVATE -Wall -Wextra -pedantic -g -O3)
+target_compile_options(line_drawing PRIVATE -Wall -Wextra -pedantic -g -O3)
 target_compile_options(render_diablo PRIVATE -Wall -Wextra -pedantic -g -O3)
+target_compile_options(triangle_rasterization PRIVATE -Wall -Wextra -pedantic -g -O3)
 
 # Add a custom target to remove all .tga files
 add_custom_target(clean_tga
